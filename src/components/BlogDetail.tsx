@@ -2,21 +2,25 @@ import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { blogPosts } from '../data/blog'; // Assuming you create this data file
 import { ArrowLeft, MessageSquare } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { tomorrow } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 const BlogDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  console.log('BlogDetail rendered with id:', id);
   const post = blogPosts.find(p => p.id === Number(id));
 
   if (!post) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-black text-white">
+      <div className="flex items-center justify-center min-h-screen bg-cream-50 text-ink-900">
         <div className="text-center">
-          <h1 className="text-4xl font-bold text-red-500">404</h1>
-          <p className="text-xl mt-4">Blog post not found.</p>
+          <h1 className="text-4xl font-bold text-oxford-700 mb-4">Blog post not found</h1>
+          <p className="text-xl text-ink-700 mb-8">The post you're looking for doesn't exist.</p>
           <button
             onClick={() => navigate('/blog')}
-            className="mt-8 px-6 py-2 bg-purple-600 hover:bg-purple-700 rounded-lg transition-colors"
+            className="px-6 py-3 bg-oxford-700 hover:bg-oxford-800 text-cream-50 rounded-lg transition-colors font-serif"
           >
             Back to Blog
           </button>
@@ -26,49 +30,75 @@ const BlogDetail = () => {
   }
 
   return (
-    <div className="min-h-screen bg-black text-gray-300 font-sans p-4 sm:p-8 pt-24 sm:pt-32">
+    <div className="min-h-screen bg-cream-50 text-ink-900 pt-24 sm:pt-32 pb-16 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
         <button
           onClick={() => navigate('/blog')}
-          className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors mb-8 group"
+          className="flex items-center gap-2 text-oxford-700 hover:text-parchment-500 transition-colors mb-8 group font-serif"
         >
-          <ArrowLeft className="w-5 h-5 transition-transform group-hover:-translate-x-1" />
-          <span className="font-semibold">Back</span>
+          <ArrowLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
+          <span>Back to Blog</span>
         </button>
 
         <main>
           <div className="text-center mb-12">
-            <h1
-              className="text-4xl sm:text-6xl font-bold text-white mb-2"
-              style={{ color: post.color }}
-            >
+            <h1 className="text-4xl sm:text-6xl font-bold text-oxford-700 mb-4 font-serif">
               {post.title}
             </h1>
-            <p className="text-lg text-gray-400">{post.date}</p>
+            <div className="flex items-center justify-center gap-4 text-lg text-ink-700">
+              <span>{post.date}</span>
+              <span>•</span>
+              <span className="px-3 py-1 bg-cream-200 text-oxford-700 rounded-full text-sm font-medium">
+                {post.category}
+              </span>
+            </div>
           </div>
 
-          <div className="w-full h-64 sm:h-96 bg-gray-800 rounded-2xl mb-8 overflow-hidden">
+          <div className="w-full h-64 sm:h-96 bg-cream-200 rounded-2xl mb-8 overflow-hidden border border-parchment-400">
             <img src={post.imageUrl} alt={post.title} className="w-full h-full object-cover" />
           </div>
 
-          <article
-            className="prose prose-invert lg:prose-xl max-w-none mx-auto text-gray-300"
-            dangerouslySetInnerHTML={{ __html: post.content }}
-          />
+          <article className="bg-cream-100 border border-parchment-400 rounded-2xl p-6 sm:p-10 mb-8">
+            <div className="prose prose-lg max-w-none text-ink-900 prose-headings:text-oxford-700 prose-p:text-ink-900 prose-ul:text-ink-900 prose-li:text-ink-900 prose-strong:text-oxford-700 prose-h3:text-oxford-700 prose-h2:text-oxford-700 prose-h1:text-oxford-700 prose-a:text-oxford-700 prose-code:text-ink-900 prose-pre:bg-gray-800 prose-pre:text-gray-100 prose-pre:p-4 prose-pre:rounded-lg prose-pre:overflow-x-auto">
+              <ReactMarkdown
+                components={{
+                  code({node, inline, className, children, ...props}) {
+                    const match = /language-(\w+)/.exec(className || '');
+                    return !inline && match ? (
+                      <SyntaxHighlighter
+                        style={tomorrow}
+                        language={match[1]}
+                        PreTag="div"
+                        {...props}
+                      >
+                        {String(children).replace(/\n$/, '')}
+                      </SyntaxHighlighter>
+                    ) : (
+                      <code className={className} {...props}>
+                        {children}
+                      </code>
+                    );
+                  }
+                }}
+              >
+                {post.content}
+              </ReactMarkdown>
+            </div>
+          </article>
 
-          <div className="mt-16 border-t border-gray-700 pt-8">
-            <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+          <div className="mt-16 border-t border-parchment-400 pt-8">
+            <h2 className="text-2xl font-bold text-oxford-700 mb-6 flex items-center gap-3 font-serif">
               <MessageSquare className="w-6 h-6" />
-              Leave your comments
+              Join the Conversation
             </h2>
             <form className="flex flex-col sm:flex-row items-start gap-4">
               <textarea
-                placeholder="Share your thoughts..."
-                className="w-full sm:flex-grow h-24 p-4 bg-gray-900 border border-gray-700 rounded-lg focus:ring-2 focus:ring-purple-500 focus:outline-none transition-all"
+                placeholder="Share your thoughts on this post..."
+                className="w-full sm:flex-grow h-24 p-4 bg-cream-100 border border-parchment-400 rounded-lg focus:ring-2 focus:ring-oxford-500 focus:outline-none transition-all resize-none"
               ></textarea>
               <button
                 type="submit"
-                className="px-8 py-3 bg-purple-600 hover:bg-purple-700 rounded-lg font-semibold text-white transition-colors"
+                className="px-8 py-3 bg-oxford-700 hover:bg-oxford-800 text-cream-50 rounded-lg font-semibold transition-colors font-serif"
               >
                 Send
               </button>

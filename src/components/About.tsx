@@ -393,45 +393,90 @@ const About = () => {
   };
 
   return (
-    <div className="min-h-screen pt-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-gray-900 via-black to-gray-800 text-white">
+    <div className="min-h-screen pt-20 px-4 sm:px-6 lg:px-8 bg-cream-50 text-ink-900">
       <div className="max-w-7xl mx-auto pb-20">
         
         {/* New Profile Hero Section */}
-        <div className={`profile-hero-container text-center mb-12 sm:mb-16 transition-all duration-1000 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
-          <div className="relative inline-block">
-            <div ref={profileTiltRef} className="profile-image-wrapper">
-              <div
-                className="relative w-48 h-48 sm:w-64 sm:h-64 rounded-full flex items-center justify-center overflow-hidden"
-                style={{
-                  background: 'radial-gradient(ellipse at center, #1b2735 0%, #090a0f 100%)',
-                  boxShadow: '0 0 60px rgba(0, 212, 255, 0.2), inset 0 0 40px rgba(0,0,0,0.6)'
-                }}
-              >
-                <img 
-                  src={me} 
-                  alt="My Headshot"
-                  className="w-full h-full object-contain"
-                />
-              </div>
+        <div className={`profile-hero-container mb-12 sm:mb-16 transition-all duration-1000 ${isVisible ? 'opacity-100' : 'opacity-0'} mt-4`}> 
+          <div className="flex flex-col md:flex-row items-center md:items-start gap-8 md:gap-12 pr-0 md:pr-24">
+            <div className="relative w-40 h-40 sm:w-56 sm:h-56 rounded-full flex items-center justify-center overflow-hidden shadow-md bg-cream-100">
+              <img 
+                src={me} 
+                alt="My Headshot"
+                className="w-full h-full object-contain"
+              />
+            </div>
+            <div className="flex-1 text-center md:text-left">
+              <h2 className="text-2xl sm:text-3xl font-bold text-oxford-700 mb-4">About Me</h2>
+              <p className="text-lg sm:text-xl text-ink-900 leading-relaxed mb-2 text-justify">
+                Hi, I'm Mahlet. I'm passionate about blending technology and creativity to make a real difference in the world.
+              </p>
+              <p className="text-lg sm:text-xl text-ink-900 leading-relaxed text-justify">
+                Whether I'm building AI tools, designing interactive visuals, or collaborating with others, I love finding new ways for tech to empower people and tell meaningful stories. Welcome to my portfolio—let's explore what's possible together!
+              </p>
             </div>
           </div>
-          <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold mt-6 sm:mt-8 mb-3 sm:mb-4">My Profile</h1>
-          <p className="text-xs text-gray-500 italic max-w-md mx-auto mb-4 sm:mb-6 px-4">
-            This sweet sketch, drawn by a refugee child I've been lucky to mentor, shows their kind view of me.
-          </p>
-          <p className="text-base sm:text-lg text-gray-400 max-w-3xl mx-auto mb-8 sm:mb-12 px-4">
-            Explore the different dimensions of my experience, from technical expertise to creative endeavors and athletic pursuits.
-          </p>
-          <div className="flex flex-col items-center gap-2 text-gray-500 animate-bounce-more">
-            <span className="text-sm tracking-widest animate-subtle-glow" style={{ color: '#00D4FF' }}>SCROLL</span>
-            <ArrowDown size={24} className="animate-subtle-glow" style={{ color: '#00D4FF' }} />
+        </div>
+
+        {/* Education & Coursework Section */}
+        <div className="mb-8 sm:mb-12">
+          <div className="text-center mb-6">
+            <h2 className="text-2xl sm:text-3xl font-bold text-oxford-700 mb-2">Education</h2>
+            <div className="w-16 h-0.5 bg-oxford-700 mx-auto"></div>
+          </div>
+          
+          {/* Compact Education Card */}
+          <div className="max-w-3xl mx-auto">
+            <div className="bg-white rounded-xl shadow-md border border-parchment-400 p-6">
+              {/* University Info */}
+              <div className="flex items-start justify-between mb-4">
+                <div>
+                  <h3 className="text-xl font-bold text-oxford-700">New York University Abu Dhabi</h3>
+                  <p className="text-ink-700 font-medium">Bachelor of Science in Computer Science</p>
+                  <p className="text-sm text-ink-600">Minors: Mathematics, Economics</p>
+                </div>
+                <div className="text-right">
+                  <div className="text-sm text-ink-600">Abu Dhabi, UAE</div>
+                  <div className="text-xs text-ink-500">2021 - 2025</div>
+                </div>
+              </div>
+
+              {/* Key Coursework - Compact */}
+              <div className="border-t border-parchment-300 pt-4">
+                <h4 className="text-sm font-semibold text-oxford-700 mb-3">Key Coursework</h4>
+                <div className="flex flex-wrap gap-2">
+                  {[
+                    'Quantum Computing', 'Data Structures', 'Algorithms', 'Computer Systems Organization', 
+                    'Calculus', 'Multivariable Calculus', 'Linear Algebra', 'Human Centered Data Science', 
+                    'Cyber Security', 'Applied Data Science', 'Software Engineering', 'Statistics and Probability', 
+                    'Applied Machine Learning', 'Technology and Economical Development', 'Microeconomics',
+                    'Science of Complexity', 'Game Theory'
+                  ].map((course, index) => (
+                    <span 
+                      key={index}
+                      className="px-3 py-1 bg-cream-100 text-ink-700 text-xs rounded-full border border-parchment-300"
+                    >
+                      {course}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Study Abroad - Compact */}
+              <div className="mt-4 pt-4 border-t border-parchment-300">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="text-sm font-semibold text-oxford-700">Study Abroad:</span>
+                  <span className="text-sm text-ink-700">London, UK & Athens, Greece</span>
+                </div>
+                <p className="text-xs text-ink-600">Technology & global development, ethics in AI, comparative political economy</p>
+              </div>
+            </div>
           </div>
         </div>
 
         {/* Tab Switcher - Responsive */}
         <div className="flex justify-center mb-8 sm:mb-12 px-4">
-          <div className="bg-black/80 backdrop-blur-md p-2 rounded-2xl flex items-center gap-2 border border-[#00D4FF]/30 relative overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-r from-[#00D4FF]/10 via-transparent to-[#9D4EDD]/10 -z-10"></div>
+          <div className="bg-cream-100 p-2 rounded-2xl flex items-center gap-2 border border-parchment-400">
             {Object.keys(sectionConfig).map((key) => {
               const config = sectionConfig[key as keyof typeof sectionConfig];
               const Icon = config.icon;
@@ -439,24 +484,14 @@ const About = () => {
               <button
                   key={key}
                   onClick={() => setActiveSection(key as 'tech' | 'creative' | 'athletic')}
-                  className={`px-4 sm:px-6 py-2 text-sm font-medium rounded-xl transition-all duration-300 flex items-center gap-2 touch-button justify-center relative group
+                  className={`px-4 sm:px-6 py-2 text-sm font-medium rounded-xl transition-all duration-300 flex items-center gap-2 touch-button justify-center
                     ${activeSection === key 
-                      ? `text-black shadow-lg` 
-                      : 'text-gray-300 hover:text-white'}`
-                  }
-                style={{
-                    backgroundColor: activeSection === key ? config.color : 'transparent',
-                    boxShadow: activeSection === key ? `0 0 20px ${config.color}70` : 'none'
-                  }}
+                      ? 'bg-oxford-700 text-cream-50' 
+                      : 'bg-transparent text-oxford-700 opacity-60 hover:opacity-100'}`}
                 >
-                  <Icon size={16} className="sm:w-5 sm:h-5" />
+                  <Icon size={16} className={activeSection === key ? 'text-cream-50' : 'text-oxford-700'} />
                   <span>{key.charAt(0).toUpperCase() + key.slice(1)}</span>
-                   {activeSection !== key && (
-                    <div 
-                      className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl"
-                    />
-                  )}
-              </button>
+                </button>
               );
             })}
           </div>
@@ -466,12 +501,10 @@ const About = () => {
         {activeSection === 'tech' && (
           <div className="animate-fade-in">
             <div className="mb-12 sm:mb-16 relative">
-              <h2 className="text-2xl sm:text-3xl font-bold text-center text-[#00D4FF] mb-8 sm:mb-12">Technical Journey</h2>
-              
+              <h2 className="text-2xl sm:text-3xl font-bold text-center text-oxford-700 mb-8 sm:mb-12">Technical Journey</h2>
               <div className="relative">
                 {/* Central Timeline Line */}
                 <div className="absolute left-4 sm:left-1/2 transform sm:-translate-x-1/2 w-[1px] h-full bg-gray-600" />
-                
                 {techTimeline.map((yearGroup, index) => (
                   <div key={index} className="mb-12 sm:mb-16 relative">
                     {/* Year Marker */}
@@ -480,9 +513,8 @@ const About = () => {
                         {yearGroup.year}
                       </div>
                     </div>
-
                     {/* Timeline Items */}
-            <div className="relative">
+                    <div className="relative">
                       {yearGroup.items.map((item, itemIndex) => (
                         <div 
                           key={itemIndex} 
@@ -492,19 +524,18 @@ const About = () => {
                         >
                           {/* Content Box */}
                           <div className={`${isMobile ? 'w-full ml-8' : 'w-[40%]'} ${!isMobile && (itemIndex % 2 === 0 ? 'mr-[10%]' : 'ml-[10%]')}`}>
-                            <div className="bg-black/30 rounded-lg p-4 border border-gray-700 h-full flex flex-col">
+                            <div className="bg-white rounded-lg p-4 border border-parchment-400 h-full flex flex-col shadow-md">
                               <div className="flex items-start gap-3 sm:gap-4 flex-grow">
-                                <img src={item.logo} alt={`${item.title} logo`} className="w-8 h-8 sm:w-10 sm:h-10 rounded-full mt-1 flex-shrink-0" />
+                                <img src={item.logo} alt={`${item.title} logo`} className="w-12 h-12 sm:w-16 sm:h-16 mt-1 flex-shrink-0 object-contain" />
                                 <div className="min-w-0 flex-1">
-                                  <h3 className="text-base sm:text-lg font-semibold text-white mb-1">{item.title}</h3>
-                                  <p className="text-xs sm:text-sm text-purple-400 mb-2">{item.location}</p>
-                                  <p className="text-gray-400 text-xs sm:text-sm leading-relaxed">{item.description}</p>
+                                  <h3 className="text-base sm:text-lg font-semibold text-oxford-700 mb-1">{item.title}</h3>
+                                  <p className="text-xs sm:text-sm text-ink-700 mb-2">{item.location}</p>
+                                  <p className="text-ink-900 text-xs sm:text-sm leading-relaxed">{item.description}</p>
                                 </div>
                               </div>
                               <p className="text-xs text-gray-500 mt-3 sm:mt-4 text-right">{item.date}</p>
                             </div>
                           </div>
-
                           {/* Connecting Line */}
                           {!isMobile && (
                             <div 
@@ -513,7 +544,6 @@ const About = () => {
                               } w-[10%] h-[1px] bg-gray-600`}
                             />
                           )}
-
                           {/* Connection Point */}
                           <div className="absolute left-4 sm:left-1/2 top-[50%] transform -translate-x-1/2 -translate-y-1/2">
                             <div className="w-2 h-2 rounded-full bg-gray-400 border border-gray-600" />
@@ -521,18 +551,18 @@ const About = () => {
                         </div>
                       ))}
                     </div>
-                </div>
+                  </div>
                 ))}
               </div>
             </div>
 
             <div className="space-y-6">
-              <h3 className="text-2xl sm:text-3xl font-bold text-center text-[#00D4FF] mb-6 sm:mb-8">Technical Skills</h3>
+              <h3 className="text-2xl sm:text-3xl font-bold text-center text-oxford-700 mb-6 sm:mb-8">Technical Skills</h3>
               <div className="max-w-lg mx-auto px-4">
                 {techSkills.map((skill) => (
                   <div key={skill.name} className="relative group mb-4">
                     <div className="flex justify-between items-center">
-                    <span className="text-white font-medium text-base sm:text-lg">{skill.name}</span>
+                    <span className="text-oxford-700 font-medium text-base sm:text-lg">{skill.name}</span>
                       <span className="font-mono text-base sm:text-lg" style={{ color: skill.color }}>
                         {'★'.repeat(skill.level)}{'☆'.repeat(5 - skill.level)}
                       </span>
@@ -548,18 +578,18 @@ const About = () => {
         {activeSection === 'creative' && (
           <div className="animate-fade-in grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8" style={{ perspective: '1200px' }}>
             {/* Visual Storytelling */}
-            <div ref={creativeTiltRef} className="bg-black/30 p-4 sm:p-6 rounded-2xl border border-purple-500/30 transition-all duration-300 flex flex-col" style={{ transformStyle: 'preserve-3d' }}>
+            <div ref={creativeTiltRef} className="bg-white p-4 sm:p-6 rounded-2xl border border-parchment-400 transition-all duration-300 flex flex-col shadow-md" style={{ transformStyle: 'preserve-3d' }}>
               <div className="flex items-center gap-3 mb-4 sm:mb-6">
                 <creativeProjects.visualStorytelling.icon size={20} className="sm:w-6 sm:h-6 text-purple-400" />
-                <h3 className="text-xl sm:text-2xl font-bold text-purple-400">{creativeProjects.visualStorytelling.title}</h3>
-                </div>
+                <h3 className="text-xl sm:text-2xl font-bold text-oxford-700">{creativeProjects.visualStorytelling.title}</h3>
+              </div>
               <div className="space-y-3 sm:space-y-4 flex-grow">
                 {creativeProjects.visualStorytelling.items.map((item, index) => (
-                  <div key={index} className="bg-gray-800/50 p-3 sm:p-4 rounded-lg lift-up flex flex-col">
+                  <div key={index} className="bg-cream-100 p-3 sm:p-4 rounded-lg lift-up flex flex-col border border-parchment-400">
                     <div className="flex-grow">
-                      <h4 className="font-bold text-white text-sm sm:text-base">{item.title}</h4>
-                      <p className="text-xs sm:text-sm text-purple-400">{item.location}</p>
-                      <p className="text-xs sm:text-sm text-gray-400 mt-2">{item.description}</p>
+                      <h4 className="font-bold text-oxford-700 text-sm sm:text-base">{item.title}</h4>
+                      <p className="text-xs sm:text-sm text-ink-700 mb-2">{item.location}</p>
+                      <p className="text-xs sm:text-sm text-ink-900 mt-2">{item.description}</p>
                     </div>
                     <p className="text-xs text-gray-500 mt-3 sm:mt-4 text-right">{item.date}</p>
                   </div>
@@ -568,19 +598,19 @@ const About = () => {
             </div>
 
             {/* Creative Philosophy */}
-            <div className="bg-black/30 p-4 sm:p-6 rounded-2xl border border-yellow-500/30">
+            <div className="bg-white p-4 sm:p-6 rounded-2xl border border-parchment-400 shadow-md">
               <div className="flex items-center gap-3 mb-4 sm:mb-6">
-                <creativeProjects.creativePhilosophy.icon size={20} className="sm:w-6 sm:h-6 text-yellow-400" />
-                <h3 className="text-xl sm:text-2xl font-bold text-yellow-400">{creativeProjects.creativePhilosophy.title}</h3>
+                <creativeProjects.creativePhilosophy.icon size={20} className="sm:w-6 sm:h-6 text-purple-400" />
+                <h3 className="text-xl sm:text-2xl font-bold text-oxford-700">{creativeProjects.creativePhilosophy.title}</h3>
               </div>
-              <p className="text-base sm:text-lg italic text-gray-300 mb-4 sm:mb-6 border-l-4 border-yellow-500 pl-4 shimmer-text">
+              <p className="text-base sm:text-lg italic text-ink-900 mb-4 sm:mb-6 border-l-4 border-parchment-400 pl-4 shimmer-text">
                 {creativeProjects.creativePhilosophy.quote}
               </p>
               <div className="space-y-3">
                 {creativeProjects.creativePhilosophy.principles.map((principle, index) => (
                   <div key={index} className="flex items-center gap-3 dot-pulse" style={{ '--dot-color': principle.color } as React.CSSProperties}>
                     <div className="w-2 h-2 rounded-full transition-all duration-300" style={{ backgroundColor: principle.color }} />
-                    <span className="text-gray-300 text-sm sm:text-base">{principle.text}</span>
+                    <span className="text-ink-900 text-sm sm:text-base">{principle.text}</span>
                   </div>
                 ))}
               </div>
@@ -592,8 +622,8 @@ const About = () => {
         {activeSection === 'athletic' && (
           <div className="animate-fade-in space-y-8 sm:space-y-12">
             <div className="text-center">
-              <h2 className="text-2xl sm:text-4xl font-bold text-yellow-400 inline-block px-3 sm:px-4 py-2 bg-yellow-500/10 rounded-lg">ATHLETIC EXCELLENCE</h2>
-              <p className="text-base sm:text-lg text-gray-300 max-w-2xl mx-auto mt-4 px-4">
+              <h2 className="text-2xl sm:text-4xl font-bold text-yellow-400 inline-block">ATHLETIC EXCELLENCE</h2>
+              <p className="text-base sm:text-lg text-ink-900 max-w-2xl mx-auto mt-4 px-4">
                 Sports have taught me discipline, teamwork, and the relentless pursuit of improvement.
               </p>
             </div>
@@ -602,14 +632,14 @@ const About = () => {
               {athleticAchievements.map((achievement, index) => {
                 const Icon = achievement.icon;
                 return (
-                  <div ref={athleticTiltRef} key={index} className="bg-black/30 p-4 sm:p-6 rounded-2xl border border-yellow-500/30 text-center transition-all duration-300" style={{ transformStyle: 'preserve-3d' }}>
+                  <div ref={athleticTiltRef} key={index} className="bg-white p-4 sm:p-6 rounded-2xl border border-yellow-200 text-center transition-all duration-300 shadow-md" style={{ transformStyle: 'preserve-3d' }}>
                     <div className="icon-pop inline-block">
                       <Icon size={32} className="sm:w-10 sm:h-10 mx-auto text-yellow-400 mb-3 sm:mb-4" />
                     </div>
-                    <h4 className="text-lg sm:text-xl font-bold text-white">{achievement.sport}</h4>
+                    <h4 className="text-lg sm:text-xl font-bold text-oxford-700">{achievement.sport}</h4>
                     <p className="font-semibold text-yellow-500 mb-2 sm:mb-3 text-sm sm:text-base">{achievement.role}</p>
-                    <p className="text-xs sm:text-sm text-gray-400 mb-3 sm:mb-4">{achievement.description}</p>
-                    <div className="flex justify-around border-t border-gray-700 pt-3">
+                    <p className="text-xs sm:text-sm text-ink-900 mb-3 sm:mb-4">{achievement.description}</p>
+                    <div className="flex justify-around border-t border-yellow-100 pt-3">
                       {Object.entries(achievement.stats).map(([key, value]) => (
                         <div key={key}>
                           <AnimatedStat value={value} />
@@ -623,14 +653,14 @@ const About = () => {
             </div>
 
             <div className="mt-12 sm:mt-16">
-              <h3 className="text-xl sm:text-2xl font-bold text-center text-white mb-6 sm:mb-8">Athletic Values in Tech</h3>
+              <h3 className="text-xl sm:text-2xl font-bold text-center text-oxford-700 mb-6 sm:mb-8">Athletic Values in Tech</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 sm:gap-x-8 gap-y-6 sm:gap-y-8 max-w-4xl mx-auto px-4">
                 {athleticValues.map((value, index) => (
                   <div key={index} className="flex items-start gap-3 sm:gap-4 dot-pulse" style={{ '--dot-color': value.color } as React.CSSProperties}>
                     <div className="w-3 h-3 mt-1.5 rounded-full flex-shrink-0 transition-all duration-300" style={{ backgroundColor: value.color }} />
                     <div>
-                      <h4 className="font-bold text-white text-sm sm:text-base">{value.text}</h4>
-                      <p className="text-xs sm:text-sm text-gray-400">{value.description}</p>
+                      <h4 className="font-bold text-oxford-700 text-sm sm:text-base">{value.text}</h4>
+                      <p className="text-xs sm:text-sm text-ink-900">{value.description}</p>
                     </div>
                   </div>
                 ))}

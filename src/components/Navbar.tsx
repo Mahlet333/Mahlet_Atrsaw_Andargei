@@ -30,27 +30,26 @@ const Navbar = () => {
   ];
 
   const mobileMenu = (
-    <div className="md:hidden fixed inset-0 bg-black/95 backdrop-blur-md z-50 mobile-nav-overlay">
+    <div className="md:hidden fixed inset-0 bg-cream-100 z-50 mobile-nav-overlay">
       <div className="flex flex-col items-center justify-center h-full space-y-6 mobile-nav-menu">
         {navItems.map(({ path, label, icon: Icon }) => (
           <Link
             key={path}
             to={path}
             onClick={() => setIsOpen(false)}
-            className={`flex items-center space-x-4 px-6 py-4 rounded-xl transition-all duration-300 touch-button w-full max-w-xs justify-center ${
+            className={`flex items-center space-x-4 px-6 py-4 rounded-xl transition-all duration-300 touch-button w-full max-w-xs justify-center oxford-card ${
               location.pathname === path
-                ? 'text-[#00D4FF] bg-[#00D4FF]/10 border border-[#00D4FF]/30'
-                : 'text-gray-300 hover:text-[#00D4FF] hover:bg-[#00D4FF]/5 border border-transparent'
+                ? 'text-oxford-700 underline bg-cream-200'
+                : 'text-ink-900 hover:text-oxford-700'
             }`}
           >
             <Icon size={24} />
-            <span className="text-lg font-medium">{label}</span>
+            <span className="text-lg font-medium font-serif">{label}</span>
           </Link>
         ))}
-        {/* Close button for mobile */}
         <button
           onClick={() => setIsOpen(false)}
-          className="absolute top-8 right-6 p-3 rounded-lg text-gray-400 hover:text-white transition-colors touch-button"
+          className="absolute top-8 right-6 p-3 rounded-lg text-ink-600 hover:text-oxford-700 transition-colors touch-button oxford-card"
           aria-label="Close menu"
         >
           <X size={24} />
@@ -60,43 +59,34 @@ const Navbar = () => {
   );
 
   return (
-    <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${
-      scrolled ? 'bg-[#0D0D0D]/95 backdrop-blur-md py-2' : 'bg-transparent py-4'
-    }`}>
-      {/* Mobile Menu Overlay rendered as a portal */}
+    <nav className={`fixed top-0 w-full z-50 bg-cream-100 border-b border-parchment-100 py-3`}>
       {isOpen && typeof window !== 'undefined' && ReactDOM.createPortal(mobileMenu, document.body)}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center">
-          {/* Logo */}
           <Link 
             to="/" 
-            className="text-xl sm:text-2xl font-bold text-[#00D4FF] hover:text-[#9D4EDD] transition-colors touch-button flex items-center"
+            className="text-xl sm:text-2xl font-bold text-ink-900 hover:text-oxford-700 transition-colors touch-button flex items-center font-serif"
           >
-            M.A.
           </Link>
-
-          {/* Desktop Menu */}
           <div className="hidden md:flex space-x-4 lg:space-x-8">
             {navItems.map(({ path, label, icon: Icon }) => (
               <Link
                 key={path}
                 to={path}
-                className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-all duration-200 touch-button ${
+                className={`nav-link flex items-center space-x-2 px-3 py-2 rounded-lg transition-all duration-200 touch-button ${
                   location.pathname === path
-                    ? 'text-[#00D4FF] bg-[#00D4FF]/10'
-                    : 'text-gray-300 hover:text-[#00D4FF] hover:bg-[#00D4FF]/5'
+                    ? 'text-oxford-700 underline'
+                    : 'text-ink-900 hover:text-oxford-700'
                 }`}
               >
                 <Icon size={16} />
-                <span className="text-sm font-medium">{label}</span>
+                <span className="text-sm font-medium font-serif">{label}</span>
               </Link>
             ))}
           </div>
-
-          {/* Mobile Menu Button */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden p-3 rounded-lg text-gray-300 hover:text-[#00D4FF] transition-colors touch-button"
+            className="md:hidden p-3 rounded-lg text-ink-600 hover:text-oxford-700 transition-colors touch-button oxford-card"
             aria-label="Toggle mobile menu"
           >
             {isOpen ? <X size={24} /> : <Menu size={24} />}

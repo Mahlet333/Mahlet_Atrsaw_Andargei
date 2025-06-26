@@ -9,11 +9,13 @@ import Contact from './components/Contact';
 import Footer from './components/Footer';
 import ProjectDetail from './components/ProjectDetail';
 import BlogDetail from './components/BlogDetail';
+import ScrollToTop from './components/ScrollToTop';
 
 function App() {
   return (
     <Router>
-      <div className="bg-[#0D0D0D] text-white min-h-screen">
+      <ScrollToTop />
+      <div className="min-h-screen">
         <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />

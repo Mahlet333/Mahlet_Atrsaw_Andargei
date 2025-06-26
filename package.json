@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://Mahlet333.github.io/Mahlet_Portfolio_Creative",
+  "homepage": "https://Mahlet333.github.io/Mahlet_Atrsaw_Andargei",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -13,10 +13,13 @@
     "deploy": "gh-pages -d dist"
   },
   "dependencies": {
+    "@types/react-syntax-highlighter": "^15.5.13",
     "lucide-react": "^0.344.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-router-dom": "^6.21.0"
+    "react-markdown": "^10.1.0",
+    "react-router-dom": "^6.21.0",
+    "react-syntax-highlighter": "^15.6.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.1",

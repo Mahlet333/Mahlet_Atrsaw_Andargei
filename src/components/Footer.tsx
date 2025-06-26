@@ -13,7 +13,6 @@ const Footer = () => {
           {/* Brand */}
           <div className="text-center md:text-left">
             <div className="flex items-center justify-center md:justify-start space-x-2 mb-3 sm:mb-4">
-              <span className="text-2xl sm:text-3xl font-bold text-[#00D4FF]">M.A.</span>
               <div className="w-2 h-2 bg-[#00D4FF] rounded-full animate-pulse"></div>
             </div>
             <p className="text-gray-400 mb-3 sm:mb-4 text-sm sm:text-base">

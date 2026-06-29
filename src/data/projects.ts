@@ -1697,4 +1697,460 @@ export const filters = [
     { id: 'ml', label: 'AI Research', icon: Brain, color: '#d67f2e' }, // cambridge-500
     { id: 'software', label: 'Software', icon: Code, color: '#a0855f' }, // velvet-500
     { id: 'creative', label: 'Creative', icon: Palette, color: '#edb12e' }, // parchment-500
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// INSERT THESE 7 OBJECTS INTO src/data/projects.ts
+// Place them BEFORE the closing ]; of the `projects` array
+// (i.e., after the Terms & Conditions project, id: 18)
+//
+// Your import line already has all the icons needed:
+//   import { Brain, Code, Palette, Database, Smartphone, Globe, Eye, Cpu } from 'lucide-react';
+// No import changes required.
+// ─────────────────────────────────────────────────────────────────────────────
+
+  // ── NEW PROJECTS ──────────────────────────────────────────────────────────
+  {
+    id: 19,
+    title: 'LSTM Autoencoder for Sensor Anomaly Detection',
+    subtitle: 'Industrial AI / Predictive Maintenance',
+    category: 'ml',
+    imageUrl: 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=800&q=80',
+    description: 'Bidirectional LSTM autoencoder trained on NASA CMAPSS turbofan engine data. Detects degradation anomalies via reconstruction error thresholding — AUC-ROC 0.903, Precision 0.929 — with a real-time streaming inference loop and hysteresis-aware alert system.',
+    detailedDescription: `# LSTM Autoencoder for Sensor Anomaly Detection
+
+A production-ready anomaly detection system built on multivariate bidirectional LSTM autoencoders, trained on NASA's CMAPSS turbofan engine dataset. The system learns to reconstruct normal sensor behavior and flags degradation events when reconstruction error exceeds a statistically calibrated threshold — no anomaly labels required during training.
+
+## Why This Architecture
+
+Training exclusively on healthy data (RUL > 30 cycles) means the model never learns to reconstruct degraded patterns. So degraded signals produce elevated reconstruction error: that elevation is the anomaly signal. This is the principled solution to label scarcity in industrial settings.
+
+## Architecture
+
+\`\`\`
+Input (B, T=30, F=17)
+        │
+   BiLSTM Encoder   ← 2 layers, hidden=64, bidirectional
+   + Linear proj    ← 2H → H (bottleneck compression)
+        │  latent (B, 64)
+   LSTM Decoder     ← 2 layers, hidden=64, unidirectional
+   + Output proj    ← H → F
+        │
+Output (B, T=30, F=17)  ← reconstructed signal
+
+Anomaly score = MSE(input, reconstruction) per window
+Threshold     = μ(train_errors) + k·σ   [k=3, ~0.1% FPR]
+\`\`\`
+
+Bidirectional encoder for richer temporal representations. Unidirectional decoder because reconstruction is sequential from the bottleneck. Threshold is statistically principled and configurable to tune the precision/recall tradeoff.
+
+## Dataset — NASA CMAPSS FD001
+
+- 100 training engines, 100 test engines
+- 21 sensors (17 retained after dropping near-zero-variance channels)
+- Preprocessing: MinMax normalization fit on train only, sliding windows of 30 cycles
+- Leakage prevention: scaler never touches test data during fitting
+
+## Results
+
+| Metric    | Value  |
+|-----------|--------|
+| AUC-ROC   | **0.903** |
+| Precision | 0.929  |
+| Recall    | 0.520  |
+| F1        | 0.667  |
+| Threshold | 0.0118 |
+
+## Real-Time Inference System
+
+Built a streaming simulation loop processing engine sensor data window-by-window with an \`AlertSystem\` implementing hysteresis: N consecutive anomalous windows to fire, M consecutive normal windows to clear. Prevents alert chatter from transient reconstruction spikes — critical for operational deployability.
+
+## Extensibility
+
+- Swap BiLSTM encoder for Transformer encoder
+- Add RUL regression head on the latent vector
+- ONNX export for edge deployment
+- Tune threshold on validation set via PR-curve sweep`,
+    technologies: ['PyTorch', 'LSTM', 'Anomaly Detection', 'Time Series', 'NASA CMAPSS', 'Real-time Inference', 'Signal Processing'],
+    icon: Brain,
+    color: '#0f766e',
+    status: 'Jun 2026',
+    github: 'https://github.com/Mahlet333/LSTM-autoencoder-for-sensor-anomaly-detection',
+  },
+  {
+    id: 20,
+    title: 'RGB-D Fusion Pipeline for 3D Scene Understanding',
+    subtitle: 'Computer Vision / Robotics Perception',
+    category: 'ml',
+    imageUrl: 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=800&q=80',
+    description: 'Dual-encoder network fusing RGB and depth streams through cross-attention at four feature scales (27M params). Produces simultaneous dense semantic segmentation and metric depth refinement, reconstructs 3D point clouds via Open3D, and runs real-time DBSCAN-based obstacle detection for collision avoidance.',
+    detailedDescription: `# RGB-D Fusion Pipeline for 3D Scene Understanding
+
+A 27M-parameter dual-encoder architecture that fuses RGB and depth modalities through cross-attention at four resolution scales, producing simultaneous dense semantic segmentation and metric depth refinement. Outputs feed into an Open3D point cloud reconstruction module with DBSCAN-based obstacle detection for collision avoidance.
+
+## Architecture
+
+\`\`\`
+RGB  (B,3,H,W)  ──► ResNet-34 Encoder (pretrained ImageNet)
+                     Scales 1–4: strides 4/8/16/32, C=64/128/256/512
+
+Depth (B,1,H,W) ──► Depth Encoder (depthwise-separable CNN, 4 scales)
+
+Cross-Attention Fusion (per scale):
+  Q = Wq(depth_feat),  K = Wk(rgb_feat),  V = Wv(rgb_feat)
+  att = softmax(QKᵀ / √d)
+  fused = merge(rgb,  att·V + depth)   ← residual from depth
+
+Fused ──► UPerNet Decoder
+           PPM on deepest scale + FPN top-down laterals
+           ├── Seg head   → (B, 13, H, W) class logits
+           └── Depth head → (B,  1, H, W) metric depth
+
+Point Cloud:
+  depth_pred ──► Open3D RGBD → PointCloud
+              ──► Voxel downsample + outlier removal
+              ──► DBSCAN clustering → obstacle detection
+              ──► Collision avoidance check + clearance report
+\`\`\`
+
+**Parameter count:** 21.3M RGB encoder | 0.56M depth encoder | 2.1M fusion | 3.1M decoder
+
+## Why Cross-Attention for Fusion
+
+Cross-attention lets depth features selectively query RGB spatial information at each scale, rather than naive concatenation. The residual connection preserves the raw depth signal. UPerNet's multi-scale aggregation enables both fine-grained boundary segmentation and large-scale structural understanding simultaneously.
+
+## Loss Function
+
+\`\`\`
+L = λ_seg · CrossEntropy + λ_depth · BerHu + λ_grad · GradientLoss
+
+BerHu (reverse Huber):
+  |e| ≤ c  →  L1
+  |e| >  c  →  (e² + c²) / 2c     where c = 0.2 · max|e|
+\`\`\`
+
+BerHu preferred over L2 for depth: robust to boundary outliers while penalising large errors quadratically.
+
+## Results (NYU Depth V2 benchmark, 8 epochs)
+
+| Metric         | Value  |
+|----------------|--------|
+| mIoU           | 0.152  |
+| Pixel Accuracy | 0.697  |
+| Abs Rel (depth)| 0.220  |
+| RMSE (depth)   | 0.644  |
+| δ < 1.25       | 0.604  |
+| δ < 1.25²      | 0.924  |
+
+> With full NYU Depth V2 at 224×224 and 50+ epochs: expected mIoU ~0.40–0.50 and AbsRel ~0.15, consistent with published lightweight fusion baselines.
+
+## Obstacle Detection Pipeline
+
+1. Remove floor-level points (y threshold in camera space)
+2. DBSCAN spatial clustering (eps=0.15m, min_points=30)
+3. Filter by maximum depth (ignore far background)
+4. Sort clusters by minimum distance to camera
+5. Output structured collision report with clearance distance and navigation recommendation`,
+    technologies: ['PyTorch', 'Computer Vision', 'Cross-Attention', 'ResNet-34', 'Open3D', 'DBSCAN', '3D Reconstruction', 'Semantic Segmentation', 'Depth Estimation'],
+    icon: Eye,
+    color: '#1d4ed8',
+    status: 'Jun 2026',
+    github: 'https://github.com/Mahlet333/RGB-D-fusion-pipeline',
+  },
+  {
+    id: 21,
+    title: 'Multi-Head Surface Inspection Pipeline',
+    subtitle: 'Production Computer Vision / Industrial AI',
+    category: 'ml',
+    imageUrl: 'https://images.unsplash.com/photo-1581092921461-eab62e97a780?auto=format&fit=crop&w=800&q=80',
+    description: 'Production-grade multi-task CV system for industrial surface inspection. Shared EfficientNet-B4 backbone runs detection (anchor-free), pixel-level segmentation (U-Net decoder), and geometric keypoint extraction simultaneously. Trained on MVTec AD with DDP multi-GPU support, uncertainty-based loss weighting (Kendall et al.), and Docker deployment.',
+    detailedDescription: `# Multi-Head Surface Inspection Pipeline
+
+A production-grade computer vision system that runs detection, segmentation, and keypoint extraction simultaneously from a single shared encoder — the architecture pattern used in real industrial inspection deployments.
+
+## Why Multi-Task?
+
+Running three separate models triples inference latency. A shared backbone extracts features once; each head reads from the same feature pyramid. This is how production CV systems are actually built.
+
+## Architecture
+
+\`\`\`
+Input Image (3×H×W)
+        │
+   Shared Encoder    ← EfficientNet-B4 / ResNet-50
+   (multi-scale)       feature pyramid P3, P4, P5
+        │
+   ┌────┼──────────────────┐
+   │    │                  │
+Detection  Segmentation  Keypoint
+  Head      Head (U-Net)   Head
+   │           │              │
+BBoxes    Pixel masks    Geometric
++ Scores    (H×W)        keypoints
+            defect masks  (N × 2+conf)
+\`\`\`
+
+## Head Design Rationale
+
+**Detection head (anchor-free):** Anchor-based detectors require per-dataset anchor tuning. Anchor-free heads predict directly from feature map locations — more flexible, fewer hyperparameters, better generalization across defect scales and shapes.
+
+**Segmentation head (U-Net decoder):** Skip connections from P3/P4/P5 preserve fine-grained boundary information. Produces pixel-precise defect masks for localization and area measurement.
+
+**Keypoint head:** Geometric feature extraction invariant to camera position and hardware variation — critical for cross-site deployment where inspection rigs differ between factories.
+
+## Key Engineering Decisions
+
+**Domain randomization:** Real inspection lines have variable lighting, surface coatings, and camera hardware. Aggressively randomized augmentation forces the model to learn features invariant to these conditions — the core challenge in cross-site deployment.
+
+**Uncertainty-based loss weighting (Kendall et al. 2018):** The model automatically learns how to weight each task's loss during training. Critical in multi-task systems where task gradients conflict — eliminates manual tuning of λ_det, λ_seg, λ_kp.
+
+**Multi-GPU DDP training:** Full PyTorch DistributedDataParallel support for scaling to larger datasets.
+
+## Dataset
+
+MVTec Anomaly Detection (MVTec AD): 15 industrial categories, 5,354 high-resolution images, pixel-precise anomaly annotations.
+
+## Infrastructure
+
+- Dockerfile for reproducible environment
+- \`inference/benchmark.py\` for FPS/latency/GPU utilization profiling
+- Unit tests for all model components
+- YAML config for all hyperparameters`,
+    technologies: ['PyTorch', 'EfficientNet-B4', 'Multi-task Learning', 'Object Detection', 'Semantic Segmentation', 'Keypoint Detection', 'DDP Training', 'MVTec AD', 'Docker'],
+    icon: Eye,
+    color: '#b45309',
+    status: 'Jun 2026',
+    github: 'https://github.com/Mahlet333/Multi-head-surface-inspection-pipeline',
+  },
+  {
+    id: 22,
+    title: 'End-to-End MLOps System with Drift Detection',
+    subtitle: 'ML Engineering / Production Systems',
+    category: 'ml',
+    imageUrl: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=800&q=80',
+    description: 'Full ML pipeline from raw data ingestion to deployed FastAPI inference API, with automated distribution shift monitoring (MMD, KS test, PSI, CUSUM) and retraining triggers. Covers ETL, feature store, model registry, ONNX/TensorRT export, Docker, and real-time monitoring dashboards.',
+    detailedDescription: `# End-to-End MLOps System with Drift Detection
+
+A production ML system that covers every stage of the ML lifecycle — from raw data ingestion through feature engineering, training, evaluation, deployment, and continuous monitoring — with automated drift detection and retraining triggers.
+
+## System Architecture
+
+\`\`\`
+DATA LAYER
+  Raw Data → ETL Pipeline → Feature Store → Versioned Dataset Registry
+
+TRAINING PIPELINE
+  preprocessing/ → training/ → evaluation/ → Model Registry
+  (normalize,       (CV, early   (ROC/PR,
+   validate,         stopping)    threshold tuning)
+   split, features)
+
+DEPLOYMENT LAYER
+  PyTorch → ONNX Export → TensorRT Opt → FastAPI → Docker
+
+MONITORING & DRIFT DETECTION
+  Feature Drift    → Prediction Drift → Performance Drift
+  (MMD, KS test)    (output shift)      (label feedback)
+       └──────────────────┴────────────────────┘
+                          │
+             Drift Alert → Retraining Trigger → Auto-Retrain
+\`\`\`
+
+## Drift Detection Suite
+
+| Detector | Method | Why |
+|---|---|---|
+| Feature drift | MMD (Maximum Mean Discrepancy) | Works on full embedding vectors, not just 1D |
+| Feature drift | KS test | Fast 1D feature distribution check |
+| Covariate shift | PSI (Population Stability Index) | Standard credit/ML industry metric |
+| Gradual drift | CUSUM | Sequential change-point detection — catches slow drift before it degrades performance |
+
+**Why MMD over KS for embeddings:** KS test is inherently 1D. MMD operates on full feature vectors — essential for detecting distribution shift in learned representations.
+
+**Why CUSUM:** Threshold-based methods only detect sudden shifts. CUSUM accumulates small deviations, catching gradual drift weeks before model performance degrades. Critical in production.
+
+## Feature Engineering
+
+Per-fold feature selection with strict leakage prevention: all transformations (scaling, encoding, selection) fitted only on training folds, applied to validation. This prevents information from validation data contaminating feature engineering — the most common source of overly optimistic CV results.
+
+## What This Covers
+
+| ML Engineering Skill | Implementation |
+|---|---|
+| ETL pipeline | Schema validation, partitioning, versioning |
+| Feature engineering | Per-fold scaling, leakage prevention |
+| Model training | Cross-validation, early stopping, checkpointing |
+| Model evaluation | Threshold tuning, ROC/PR curves |
+| ONNX export | PyTorch → ONNX → TensorRT |
+| FastAPI serving | Async inference, batching, health checks |
+| Docker | Multi-stage build, env reproducibility |
+| Drift detection | MMD, KS, PSI, CUSUM |
+| Monitoring | Real-time dashboards, alert routing |
+| Retraining triggers | Automated pipeline re-invocation |`,
+    technologies: ['Python', 'FastAPI', 'ONNX', 'TensorRT', 'Docker', 'MLOps', 'Drift Detection', 'MMD', 'CUSUM', 'PSI', 'Feature Engineering', 'Model Registry'],
+    icon: Database,
+    color: '#6d28d9',
+    status: 'Jun 2026',
+    github: 'https://github.com/Mahlet333/End-to-end-MLOps-system-with-drift-detection',
+  },
+  {
+    id: 23,
+    title: 'Sim2Real Transfer for Visual Policy Learning',
+    subtitle: 'Robotics / Reinforcement Learning',
+    category: 'ml',
+    imageUrl: 'https://images.unsplash.com/photo-1563207153-f403bf289096?auto=format&fit=crop&w=800&q=80',
+    description: 'Sim-to-real transfer pipeline for robotic manipulation — trains visual policies in simulation and transfers to real hardware via domain randomization, adaptive normalization, and adversarial visual domain adaptation. Directly connected to incoming M.Sc. research in computer vision at USask.',
+    detailedDescription: `# Sim2Real Transfer for Visual Policy Learning
+
+The sim-to-real gap is one of the central open problems in robot learning: policies trained in simulation fail when deployed on physical hardware because simulated observations don't match real sensor data. This project builds a transfer pipeline that systematically closes that gap.
+
+## The Core Challenge
+
+Simulation gives unlimited data and safe exploration. Reality is the actual test. The gap between them — in lighting, textures, physics, camera noise, and observation statistics — causes sim-trained policies to collapse on real robots.
+
+## Three Complementary Transfer Mechanisms
+
+**1. Domain Randomization**
+
+During simulation training, visual parameters are randomized aggressively across each episode: lighting direction and intensity, object textures, background appearance, camera position, sensor noise. The policy is forced to learn features that generalize across this distribution rather than overfitting to a single simulated appearance.
+
+**2. Adaptive Normalization**
+
+Per-domain batch normalization with learned affine parameters. Allows the policy network to adapt its internal feature statistics when moving from simulation to real observations — without retraining the full network. Lightweight, fast, and effective.
+
+**3. Adversarial Visual Domain Adaptation**
+
+A domain discriminator tries to distinguish sim from real features. The encoder learns to make them indistinguishable. This directly minimizes the sim-to-real distribution gap in feature space.
+
+## Why All Three Together
+
+No single mechanism is sufficient:
+- Randomization alone can't cover every sim-to-real discrepancy
+- Adaptive normalization adjusts statistics but doesn't align distributions
+- Adversarial adaptation aligns distributions but needs randomization for stable training
+
+Together they create redundant, complementary transfer mechanisms that reduce distribution shift to the point where policies transfer with minimal real-world fine-tuning.
+
+## Research Connection
+
+This project directly connects to Mahlet's incoming M.Sc. research under Dr. Mrigank Rochan in the computer vision lab at the University of Saskatchewan, where visual understanding, domain generalization, and robustness to distribution shift are central themes.`,
+    technologies: ['PyTorch', 'Reinforcement Learning', 'Domain Randomization', 'Domain Adaptation', 'Robotics', 'Visual Policy Learning', 'Adversarial Training', 'Sim-to-Real'],
+    icon: Cpu,
+    color: '#0369a1',
+    status: 'Jun 2026',
+    github: 'https://github.com/Mahlet333/sim2real',
+  },
+  {
+    id: 24,
+    title: 'A2S Transfer Task — Norm Grounding Gap in LLMs',
+    subtitle: 'NLP Research / AI Evaluation Benchmark',
+    category: 'ml',
+    imageUrl: 'https://images.unsplash.com/photo-1677442135703-1787eea5ce01?auto=format&fit=crop&w=800&q=80',
+    description: 'Co-authored NLP benchmark (NYU Abu Dhabi, Spring 2026) measuring whether LLMs can detect social norm violations in naturalistic conversation vs. isolated questions. Defines and quantifies the "Norm Grounding Gap" across GPT-4, Claude, and Llama — revealing systematic failure modes in situated social reasoning.',
+    detailedDescription: `# A2S Transfer Task — Measuring the Norm Grounding Gap in LLMs
+
+**CS-UH 3260 · Artificial Social Intelligence · NYU Abu Dhabi · Spring 2026**  
+Authors: Aneeka Paul, Mahlet Astraw
+
+## The Research Question
+
+LLMs perform well on abstract social norm questions asked in isolation. But embed the same norm violation in a naturalistic four-turn conversation — and performance drops sharply. We define this as the **Norm Grounding Gap**: the delta in model accuracy between abstract norm judgment and situated conversational understanding.
+
+## Three-Level Evaluation Framework
+
+- **Level A (Abstract):** Direct questions about norm acceptability — isolated from context. LLMs perform well here.
+- **Level B (Bridge):** Norm violations in brief, low-context scenarios. Moderate performance drop.
+- **Level C (Situated):** Same violations embedded in naturalistic four-turn conversations with discourse context, implicit cues, and social subtext. Significant performance drop.
+
+Dataset constructed from NormBank social norm annotations, lifted into conversational contexts using controlled generation templates.
+
+## Technical Pipeline
+
+\`\`\`
+dataset_constructor.py
+  Sample from NormBank → generate Level A/B/C items
+  Output: items_levelA/B/C.jsonl (structured benchmark)
+
+inference_engine.py
+  Run GPT-4, Claude, Llama across all three levels
+  Output: parsed binary judgments per model × level
+
+evaluator.py
+  Accuracy, precision, recall per model × level
+  McNemar's test for within-model A→C significance
+  Output: metrics_summary.json
+
+visualizer.py
+  Norm Grounding Gap bar charts
+  Per-model degradation curves across levels
+\`\`\`
+
+## Key Findings
+
+The Norm Grounding Gap is real, statistically significant (McNemar's test), and model-invariant — it appears across GPT-4, Claude, and Llama. This reveals a systematic limitation in how LLMs ground social norms into conversational context, not a quirk of any single model.
+
+Models that perform similarly at Level A diverge substantially at Level C — meaning **abstract social reasoning capability does not predict situated social understanding**.
+
+## Why This Matters
+
+As LLMs are increasingly deployed in socially consequential settings — mental health support, conflict mediation, education — understanding exactly where their social reasoning fails is critical. This benchmark provides a rigorous, reproducible tool for measuring that gap.`,
+    technologies: ['NLP', 'LLM Evaluation', 'Python', 'GPT-4', 'Claude API', 'NormBank', 'McNemar Test', 'Benchmark Design', 'Social AI'],
+    icon: Brain,
+    color: '#be123c',
+    status: 'Spring 2026',
+    github: 'https://github.com/Mahlet333/ASI_Final_Project',
+  },
+  {
+    id: 25,
+    title: 'Anime Character Visual Design Classification',
+    subtitle: 'Computer Vision / Feature Engineering Research',
+    category: 'ml',
+    imageUrl: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=800&q=80',
+    description: 'Multi-approach CV study classifying anime characters as heroes or villains using 50+ handcrafted design features, CLIP ViT-L/14 embeddings, and VGGFace2 transfer learning. Achieves ~80% accuracy and ~0.90 AUC-ROC with design features + ResNet18. Computationally validates design conventions: warm/cool palettes, edge sharpness, and shadow density are the strongest discriminators.',
+    detailedDescription: `# Computational Analysis of Visual Design Conventions in Anime Character Classification
+
+A machine learning research study investigating whether hero/villain visual design conventions in anime are computationally learnable — and which features drive the signal.
+
+## The Research Question
+
+Anime character designers follow implicit conventions: heroes tend to have warm palettes, soft edges, open expressions. Villains get cool/dark palettes, sharp edges, high shadow density. Are these patterns consistent enough to be learned from image features alone? And do learned deep representations capture the same things as handcrafted domain features?
+
+## Three Classification Approaches
+
+### 1. Design Convention Features (50+ handcrafted)
+Features derived from anime design principles:
+- Color palette analysis: HSV histograms, warm/cool ratio, saturation distribution
+- Texture features: LBP (Local Binary Patterns), Gabor filter responses
+- Edge characteristics: Canny edge density, sharpness distribution
+- Shadow density and spatial distribution
+- Geometric face structure measurements
+
+**Result: ~80% accuracy | ~89% F1 | ~0.90 AUC-ROC**
+
+### 2. CLIP ViT-L/14 Semantic Embeddings
+Tests whether CLIP's semantic understanding of "hero" and "villain" — learned from 400M image-text pairs — aligns with visual design conventions in anime.
+
+### 3. Face-Trained Transfer Learning (VGGFace2 / ArcFace)
+**Result: ~66.7% accuracy** — domain transfer from real human faces to stylized anime faces partially works, revealing structural similarity between human face geometry and anime stylization conventions.
+
+## Key Research Findings
+
+1. **Villain design is more distinctive than hero design** — higher recall for villain classification across all methods. Heroes are visually diverse; villains follow more consistent design templates. This asymmetry is statistically robust.
+
+2. **Color palette is the strongest discriminator** — warm (red/orange) vs. cool (blue/purple) color ratios are top features across all approaches.
+
+3. **Edge sharpness and shadow density matter** — computationally validates what animators intuit about villain design.
+
+4. **Handcrafted features and learned representations are complementary** — neither dominates, suggesting domain knowledge and end-to-end learning capture different aspects of the visual signal.
+
+## Broader Significance
+
+Visual design conventions in media are computationally learnable and interpretable. This has implications for content analysis, character generation, and understanding how visual archetypes encode cultural meaning — and serves as a rigorous comparison of feature engineering versus representation learning in a novel visual domain.`,
+    technologies: ['PyTorch', 'CLIP ViT-L/14', 'VGGFace2', 'Feature Engineering', 'Transfer Learning', 'Computer Vision', 'ResNet18', 'SHAP', 'Open-CLIP'],
+    icon: Eye,
+    color: '#7c3aed',
+    status: 'Dec 2025',
+    github: 'https://github.com/Mahlet333/Machine-Learning-Final-Project',
+  },
+
 ]; 

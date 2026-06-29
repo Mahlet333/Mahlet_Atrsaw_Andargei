@@ -1689,25 +1689,7 @@ The findings challenge common assumptions about user behavior and provide a foun
     color: '#7c3aed', // violet-600
     status: '2024 – Present',
     demo: 'https://drive.google.com/file/d/1OCuoNa3IutGDSUIMNIJ1ujVgGNoxgzm7/view?usp=sharing',
-  },
-];
-
-export const filters = [
-    { id: 'all', label: 'All Dimensions', icon: Globe, color: '#fdf7e8' }, // parchment-100
-    { id: 'ml', label: 'AI Research', icon: Brain, color: '#d67f2e' }, // cambridge-500
-    { id: 'software', label: 'Software', icon: Code, color: '#a0855f' }, // velvet-500
-    { id: 'creative', label: 'Creative', icon: Palette, color: '#edb12e' }, // parchment-500
-
-
-// ─────────────────────────────────────────────────────────────────────────────
-// INSERT THESE 7 OBJECTS INTO src/data/projects.ts
-// Place them BEFORE the closing ]; of the `projects` array
-// (i.e., after the Terms & Conditions project, id: 18)
-//
-// Your import line already has all the icons needed:
-//   import { Brain, Code, Palette, Database, Smartphone, Globe, Eye, Cpu } from 'lucide-react';
-// No import changes required.
-// ─────────────────────────────────────────────────────────────────────────────
+  },,
 
   // ── NEW PROJECTS ──────────────────────────────────────────────────────────
   {
@@ -2153,5 +2135,11 @@ Visual design conventions in media are computationally learnable and interpretab
     github: 'https://github.com/Mahlet333/Machine-Learning-Final-Project',
   },
 
-]; 
- 
+];
+
+export const filters = [
+    { id: 'all', label: 'All Dimensions', icon: Globe, color: '#fdf7e8' }, // parchment-100
+    { id: 'ml', label: 'AI Research', icon: Brain, color: '#d67f2e' }, // cambridge-500
+    { id: 'software', label: 'Software', icon: Code, color: '#a0855f' }, // velvet-500
+    { id: 'creative', label: 'Creative', icon: Palette, color: '#edb12e' }, // parchment-500
+];

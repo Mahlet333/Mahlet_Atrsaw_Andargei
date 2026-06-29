@@ -2138,8 +2138,8 @@ Visual design conventions in media are computationally learnable and interpretab
 ];
 
 export const filters = [
-    { id: 'all', label: 'All Dimensions', icon: Globe, color: '#fdf7e8' }, // parchment-100
-    { id: 'ml', label: 'AI Research', icon: Brain, color: '#d67f2e' }, // cambridge-500
-    { id: 'software', label: 'Software', icon: Code, color: '#a0855f' }, // velvet-500
-    { id: 'creative', label: 'Creative', icon: Palette, color: '#edb12e' }, // parchment-500
+    { id: 'all', label: 'All Dimensions', icon: Globe, color: '#fdf7e8' },
+    { id: 'ml', label: 'AI Research', icon: Brain, color: '#d67f2e' },
+    { id: 'software', label: 'Software', icon: Code, color: '#a0855f' },
+    { id: 'creative', label: 'Creative', icon: Palette, color: '#edb12e' },
 ];

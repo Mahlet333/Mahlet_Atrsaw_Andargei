@@ -1689,7 +1689,7 @@ The findings challenge common assumptions about user behavior and provide a foun
     color: '#7c3aed', // violet-600
     status: '2024 – Present',
     demo: 'https://drive.google.com/file/d/1OCuoNa3IutGDSUIMNIJ1ujVgGNoxgzm7/view?usp=sharing',
-  },,
+  },
 
   // ── NEW PROJECTS ──────────────────────────────────────────────────────────
   {
@@ -2138,8 +2138,8 @@ Visual design conventions in media are computationally learnable and interpretab
 ];
 
 export const filters = [
-    { id: 'all', label: 'All Dimensions', icon: Globe, color: '#fdf7e8' },
-    { id: 'ml', label: 'AI Research', icon: Brain, color: '#d67f2e' },
-    { id: 'software', label: 'Software', icon: Code, color: '#a0855f' },
-    { id: 'creative', label: 'Creative', icon: Palette, color: '#edb12e' },
+    { id: 'all', label: 'All Dimensions', icon: Globe, color: '#fdf7e8' }, // parchment-100
+    { id: 'ml', label: 'AI Research', icon: Brain, color: '#d67f2e' }, // cambridge-500
+    { id: 'software', label: 'Software', icon: Code, color: '#a0855f' }, // velvet-500
+    { id: 'creative', label: 'Creative', icon: Palette, color: '#edb12e' }, // parchment-500
 ];
